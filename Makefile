@@ -1,6 +1,7 @@
 .PHONY : clean
 clean:
 	rm -r ./build
+	rm -r ./_publish_dir
 
 
 .PHONY : build
@@ -20,4 +21,4 @@ deploy : build
 	cp -Rn build/ _publish_dir/
 	git -C _publish_dir/ add .
 	git -C _publish_dir/ commit -m "Publish - $(shell date "+%Y-%m-%d %H:%M:%S")"
-	git -C _publish_dir/ --set-upstream push
+	git -C _publish_dir/ push
