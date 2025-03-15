@@ -253,10 +253,10 @@
             button.textContent = title;
 
             // Pre-load
-            new Media(file);
+            new Audio(file);
             button.addEventListener("click", function (e) {
               e.preventDefault();
-              var audio = new Media(file);
+              var audio = new Audio(file);
               audio.play();
               playing.push(audio);
             });
