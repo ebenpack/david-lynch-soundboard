@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>David Lynch Soundboard</title>
+  </head>
+  <body>
+    <style>
+      .section {
+        font-size: 1em;
+      }
+      .button-section {
+      }
+      .button {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin: 4px;
+      }
+    </style>
+    <div id="root">
+      <button id="stop">STOP ALL</button>
+    </div>
+    <script>
+      const sounds = {"The Arm": ["./sounds/The Arm/1 - ive got good news.wav", "./sounds/The Arm/2 - that gum you like is going to.wav", "./sounds/The Arm/3 - come back in style.wav"], "Pete Martell": ["./sounds/Pete Martell/fish in the percolator.wav"], "David Lynch": ["./sounds/David Lynch/5 - keep your eye on the donut.wav", "./sounds/David Lynch/1 - life is filled with abstractions.wav", "./sounds/David Lynch/he whos hapiness is within.wav", "./sounds/David Lynch/4 - intuition = intellect + emotion.wav", "./sounds/David Lynch/8 - pictures and sounds flowing together in time.wav", "./sounds/David Lynch/Ideas are like fish-short.wav", "./sounds/David Lynch/3 - Ideas are like Fish.wav", "./sounds/David Lynch/Ideas are like fish. To catch them, you have to go deep.wav", "./sounds/David Lynch/7 - abstractions gives them room to dream.wav", "./sounds/David Lynch/happiness-without-knowing-your-true-self.wav", "./sounds/David Lynch/9 - the suffocating rubber clown suit of negativity.wav", "./sounds/David Lynch/10 - catch ideas like fish.wav", "./sounds/David Lynch/suffocating-rubber-clown-suit.wav", "./sounds/David Lynch/6 - deep hole, beautiful donut.wav", "./sounds/David Lynch/rubber-clown-suit-long.wav", "./sounds/David Lynch/2 - and the way we make heads or tails of it it through intuition.wav", "./sounds/David Lynch/11 - ideas-are-so-beautiful-and-so-abstract.wav"], "Agent Cooper": ["./sounds/Agent Cooper/1 - give yerself a present.wav"], "Gordon Cole": ["./sounds/Gordon Cole/3 - WE ARE LIKE THE DREAMER WHO DREAMS AND THEN LIVES INSIDE THE DREAM.wav", "./sounds/Gordon Cole/9 - FIX THEIR HEARTS OR DIE.wav", "./sounds/Gordon Cole/7 - acts like hes never seen a kiss before.wav", "./sounds/Gordon Cole/1 - I HAD ANOTHER MONICA BELLUCI DREAM.wav", "./sounds/Gordon Cole/6 - TWO ADULTS SHARING A TENDER MOMOMENT.wav", "./sounds/Gordon Cole/2 - AND THEN SHE SAID THE ANCIENT PHRASE.wav", "./sounds/Gordon Cole/5 - A VERY POWERFUL UNEASY FEELING CAME OVER ME.wav", "./sounds/Gordon Cole/4 - BUT WHO IS THE DREAMER.wav", "./sounds/Gordon Cole/8 - TAKE ANOTHER LOOK SONNY ITS GONNA HAPPEN AGAIN.wav"], "Phillip Jeffries": ["./sounds/Phillip Jeffries/It was a dream. We live inside a dream.wav"]};
+      (function () {
+        const playing = [];
+        const stop = document.getElementById("stop");
+        stop.addEventListener("click", () => {
+          while ((audio = playing.pop())) {
+            try {
+              audio.pause();
+              audio.currentTime = 0;
+            } catch {
+              console.log("C-c-c-can't stop the beat 🤷‍♂️");
+            }
+          }
+        });
+        const root = document.getElementById("root");
+        const getJustFile = (file) => {
+          return file.split("/").at(-1).replace(".wav", "");
+        };
+        const getFileTitle = (file) => {
+          return getJustFile(file)
+            .replace(/^\d+\s*-\s*/, "")
+            .replace(/-/g, " ")
+            .split(" ")
+            .map((word) => `${word[0]?.toUpperCase()}${word.substr(1)}`)
+            .join(" ");
+        };
+        const sortFiles = (fullFileA, fullFileB) => {
+          const fileA = getJustFile(fullFileA);
+          const fileB = getJustFile(fullFileB);
+          const re = /^(\d+)/;
+          const fileMatchA = re.exec(fileA);
+          const fileMatchB = re.exec(fileB);
+          debugger;
+          if (fileMatchA) {
+            if (fileMatchB) {
+              return (
+                Number.parseInt(fileMatchA[0]) - Number.parseInt(fileMatchB[0])
+              );
+            }
+            return -1;
+          }
+          if (fileMatchB) {
+            return 1;
+          }
+          return fileA.localeCompare(fileB);
+        };
+
+        Object.entries(sounds).forEach(([dir, files]) => {
+          const section = document.createElement("div");
+          section.classList.add("section");
+          const heading = document.createElement("h3");
+          heading.textContent = dir;
+          section.appendChild(heading);
+          const buttonSection = document.createElement("div");
+          buttonSection.classList.add("button-section");
+          files.sort(sortFiles).forEach((file) => {
+            const button = document.createElement("button");
+            button.classList.add("button");
+            let title = getFileTitle(file);
+
+            button.textContent = title;
+            button.addEventListener("click", function (e) {
+              e.preventDefault();
+              var audio = new Audio(file);
+              audio.play();
+              playing.push(audio);
+            });
+            buttonSection.appendChild(button);
+          });
+          section.appendChild(buttonSection);
+          root.appendChild(section);
+        });
+      })();
+    </script>
+  </body>
+</html>
