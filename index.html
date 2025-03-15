@@ -245,7 +245,7 @@
           files.sort(sortFiles).forEach((file) => {
             const button = document.createElement("button");
             button.classList.add("button");
-            if (!file.endsWith(".ogg")) {
+            if (!file.endsWith(".wav")) {
               return;
             }
             let title = getFileTitle(file);
