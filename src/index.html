@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>David Lynch Soundboard</title>
+  </head>
+  <body>
+    <style>
+      .section {
+        font-size: 1em;
+      }
+      .button-section {
+      }
+      .button {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin: 4px;
+      }
+    </style>
+    <div id="root">
+      <button id="stop">STOP ALL</button>
+    </div>
+    <script>
+      const sounds = SOUND_FILE_LIST;
+      (function () {
+        const playing = [];
+        const stop = document.getElementById("stop");
+        stop.addEventListener("click", () => {
+          while ((audio = playing.pop())) {
+            try {
+              audio.pause();
+              audio.currentTime = 0;
+            } catch {
+              console.log("C-c-c-can't stop the beat 🤷‍♂️");
+            }
+          }
+        });
+        const root = document.getElementById("root");
+        const getJustFile = (file) => {
+          return file.split("/").at(-1).replace(".wav", "");
+        };
+        const getFileTitle = (file) => {
+          return getJustFile(file)
+            .replace(/^\d+\s*-\s*/, "")
+            .replace(/-/g, " ")
+            .split(" ")
+            .map((word) => `${word[0]?.toUpperCase()}${word.substr(1)}`)
+            .join(" ");
+        };
+        const sortFiles = (fullFileA, fullFileB) => {
+          const fileA = getJustFile(fullFileA);
+          const fileB = getJustFile(fullFileB);
+          const re = /^(\d+)/;
+          const fileMatchA = re.exec(fileA);
+          const fileMatchB = re.exec(fileB);
+          debugger;
+          if (fileMatchA) {
+            if (fileMatchB) {
+              return (
+                Number.parseInt(fileMatchA[0]) - Number.parseInt(fileMatchB[0])
+              );
+            }
+            return -1;
+          }
+          if (fileMatchB) {
+            return 1;
+          }
+          return fileA.localeCompare(fileB);
+        };
+
+        Object.entries(sounds).forEach(([dir, files]) => {
+          const section = document.createElement("div");
+          section.classList.add("section");
+          const heading = document.createElement("h3");
+          heading.textContent = dir;
+          section.appendChild(heading);
+          const buttonSection = document.createElement("div");
+          buttonSection.classList.add("button-section");
+          files.sort(sortFiles).forEach((file) => {
+            const button = document.createElement("button");
+            button.classList.add("button");
+            let title = getFileTitle(file);
+
+            button.textContent = title;
+            button.addEventListener("click", function (e) {
+              e.preventDefault();
+              var audio = new Audio(file);
+              audio.play();
+              playing.push(audio);
+            });
+            buttonSection.appendChild(button);
+          });
+          section.appendChild(buttonSection);
+          root.appendChild(section);
+        });
+      })();
+    </script>
+  </body>
+</html>
