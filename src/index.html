@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>David Lynch Soundboard</title>
   </head>
   <body>
@@ -150,13 +151,21 @@
       #stop {
         background-color: red;
       }
-      @media screen and (max-width: 600px) {
+      #root {
+        position: relative;
+      }
+      .stop-container {
+        position: sticky;
+        background-color: white;
+        top: 0;
+      }
+      @media only screen and (max-width: 600px) {
         body {
           text-align: center;
           margin: 10px;
         }
         .section {
-          font-size: 2em;
+          font-size: 1.3em;
           margin-bottom: 40px;
         }
         .button-section {
@@ -174,7 +183,9 @@
       }
     </style>
     <div id="root">
-      <button id="stop">STOP ALL</button>
+      <div class="stop-container">
+        <button id="stop">STOP ALL</button>
+      </div>
     </div>
     <script>
       const sounds = SOUND_FILE_LIST;
