@@ -1,3 +1,7 @@
 .DS_Store
 build/
 _publish_dir/
+sounds/SOURCE/
+sounds/TODO
+original-wavs/
+.venv/
