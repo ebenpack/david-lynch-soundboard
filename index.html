@@ -145,8 +145,13 @@
         padding: 4px;
         font-size: 1.1em;
         font-weight: bold;
-        margin-top: 4px;
-        margin-bottom: 4px;
+        margin: 4px;
+      }
+      .button:first-child {
+        margin-left: 0;
+      }
+      .button:last-child {
+        margin-right: 0;
       }
       #stop {
         background-color: red;
@@ -204,7 +209,12 @@
         });
         const root = document.getElementById("root");
         const getJustFile = (file) => {
-          return file.split("/").at(-1).replace(".wav", "").replace(".ogg", "");
+          return file
+            .split("/")
+            .at(-1)
+            .replace(".wav", "")
+            .replace(".ogg", "")
+            .replace(".aac", "");
         };
         const getFileTitle = (file) => {
           return getJustFile(file)
